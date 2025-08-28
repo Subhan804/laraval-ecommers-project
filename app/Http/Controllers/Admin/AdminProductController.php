@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class AdminProductController extends Controller
 {
@@ -27,12 +28,22 @@ class AdminProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id'
+            'name'        => 'required|string|max:255',
+            'price'       => 'required|numeric',
+            'description' => 'required|string|max:1000',
+            'category_id' => 'required|exists:categories,id',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        Product::create($request->all());
+        $data = $request->only(['name', 'price', 'description', 'category_id']);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
+        Product::create($data);
+
         return redirect()->route('products.index')->with('success', 'Product added!');
     }
 
@@ -48,16 +59,29 @@ class AdminProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'category_id' => 'required|numeric',
-            'price' => 'required|numeric'
+            'name'        => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price'       => 'required|numeric',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'description' => 'required|string|max:1000',
         ]);
 
         $product = Product::findOrFail($id);
-        $product->update($request->all());
+        $data = $request->only(['name', 'price', 'description', 'category_id']);
 
-        return redirect()->route('products.index')->with('success', 'Product updated.');
+        if ($request->hasFile('image')) {
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
+        $product->update($data);
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
+
 
     // Delete
     public function destroy($id)
@@ -67,4 +91,3 @@ class AdminProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product deleted.');
     }
 }
-

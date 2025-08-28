@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
 @section('content')
-    <h2>Add New Category</h2>
+    <h2 class="text-center">Add New Category</h2>
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm container mt-4">
         <div class="card-body">
             <form action="{{ route('categories.store') }}" method="POST">
                 @csrf

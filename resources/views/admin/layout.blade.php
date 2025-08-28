@@ -14,7 +14,8 @@
             width: 220px;
             background-color: #343a40;
             position: fixed;
-            top: 56px; /* below top navbar */
+            top: 56px;
+            /* below top navbar */
             left: 0;
             color: white;
             padding-top: 20px;
@@ -31,7 +32,8 @@
         }
         .content {
             margin-left: 220px;
-            margin-top: 70px; /* below top navbar */
+            margin-top: 70px;
+            /* below top navbar */
             padding: 20px;
         }
     </style>
@@ -42,9 +44,22 @@
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('admin.dashboard') }}">Store Admin</a>
-            <div>
-                <a href="#" class="btn btn-sm btn-outline-light">Settings</a>
-                <a href="#" class="btn btn-sm btn-danger">Logout</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="#" class="btn btn-sm btn-outline-light">Home</a>
+                <a href="#" class="btn btn-sm btn-outline-light">About</a>
+
+                <!-- Dropdown Button Group -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        View
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url('/catalog') }}">your store</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/catalog/new') }}">New Arrivals</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/catalog/sale') }}">On Sale</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

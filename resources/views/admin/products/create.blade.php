@@ -4,7 +4,7 @@
     <div class="container mt-4">
         <h2 class="mb-4">➕ Add Product</h2>
 
-        <form action="{{ route('products.store') }}" method="POST" class="card p-4 shadow-sm">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
             @csrf
 
             <div class="mb-3">
@@ -12,6 +12,26 @@
                 <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"
                     value="{{ old('name') }}" placeholder="Enter product name">
                 @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" name="price" id="price"
+                    class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}"
+                    placeholder="Enter price">
+                @error('price')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="description" id="description" rows="4"
+                    class="form-control @error('description') is-invalid @enderror"
+                    placeholder="Enter product description">{{ old('description') }}</textarea>
+                @error('description')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -29,13 +49,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" name="price" id="price"
-                    class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}"
-                    placeholder="Enter price">
-                @error('price')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <label>Image</label>
+                <input type="file" name="image" class="form-control">
             </div>
 
             <div class="d-flex justify-content-between">
