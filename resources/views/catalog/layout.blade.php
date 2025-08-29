@@ -284,8 +284,8 @@
                         </li>
                         <li>
                             <div class="d-grid gap-2">
-                                <a href="cart.html" class="btn btn-sm btn-outline-dark">View Cart</a>
-                                <a href="checkout.html" class="btn btn-sm btn-dark">Checkout</a>
+                                <a href="{{ route('cart.index') }}" class="btn btn-sm btn-outline-dark">View Cart</a>
+                                <a href="cart.html" class="btn btn-sm btn-dark">Checkout</a>
                             </div>
                         </li>
                     </ul>

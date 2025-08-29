@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -10,16 +10,16 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm align-middle">
+                    <table class="table table-hover table-bordered align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col" style="width: 5%;">ID</th>
-                                <th scope="col" style="width: 10%;">Image</th>
-                                <th scope="col" style="width: 20%;">Description</th>
-                                <th scope="col" style="width: 25%;">Name</th>
-                                <th scope="col" style="width: 20%;">Category</th>
-                                <th scope="col" style="width: 15%;">Price</th>
-                                <th scope="col" style="width: 25%;">Actions</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,24 +28,26 @@
                                     <td>{{ $product->id }}</td>
                                     <td>
                                         @if ($product->image)
-                                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
-                                                class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <div class="ratio ratio-1x1" style="width: 60px;">
+                                                <img src="{{ asset('storage/' . $product->image) }}"
+                                                    alt="{{ $product->name }}" class="img-fluid rounded object-fit-cover">
+                                            </div>
                                         @else
                                             <span class="text-muted fst-italic">No Image</span>
                                         @endif
                                     </td>
-                                    <td>{{ $product->description }}</td>
-                                    <td class="text-truncate">{{ $product->name }}</td>
+                                    <td class="text-wrap">{{ $product->description }}</td>
+                                    <td class="text-truncate" style="max-width: 150px;">{{ $product->name }}</td>
                                     <td>{{ $product->category->name ?? 'No Category' }}</td>
                                     <td>${{ number_format($product->price, 2) }}</td>
                                     <td>
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('products.edit', $product->id) }}"
+                                                class="btn btn-sm btn-outline-primary m-1">Edit</a>
                                             <form action="{{ route('products.destroy', $product->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                <button type="submit" class="btn btn-sm btn-outline-danger m-1"
                                                     onclick="return confirm('Are you sure you want to delete this product?')">
                                                     Delete
                                                 </button>
@@ -57,6 +59,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
