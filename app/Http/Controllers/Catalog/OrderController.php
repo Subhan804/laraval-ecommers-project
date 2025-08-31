@@ -10,25 +10,6 @@ use App\Models\Product;
 
 class OrderController extends Controller
 {
-    public function store(Request $request, Product $product)
-    {
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity']++;
-        } else {
-            $cart[$product->id] = [
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => 1
-            ];
-        }
-
-        session()->put('cart', $cart);
-
-        return redirect()->route('checkout')->with('success', 'Product added to cart. Proceed to checkout.');
-    }
-
     // Show checkout page
     public function checkout()
     {
@@ -42,7 +23,8 @@ class OrderController extends Controller
         $request->validate([
             'customer_name' => 'required',
             'customer_email' => 'required|email',
-            'customer_phone' => 'required'
+            'customer_phone' => 'required',
+            'address' => 'required'
         ]);
 
         $cart = session()->get('cart', []);
@@ -60,8 +42,9 @@ class OrderController extends Controller
             'customer_name' => $request->customer_name,
             'customer_email' => $request->customer_email,
             'customer_phone' => $request->customer_phone,
+            'address' => $request->address,
             'total' => $total,
-            'status' => 'pending',
+            'status' => 'Pending',
         ]);
 
         // Create order items

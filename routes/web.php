@@ -24,11 +24,8 @@ Route::prefix('admin')->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('catalog')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('catalog.home');
-    Route::get('/categories', [CategoryController::class, 'index'])->name('catalog.categories');
     Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('catalog.category.show');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('catalog.product.show');
-    Route::post('/order/{product}', [CatalogOrderController::class, 'store'])->name('catalog.order.store');
 });
 
 // Cart routes
@@ -40,5 +37,3 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 // Checkout and order placement
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/order/place', [OrderController::class, 'place'])->name('order.place');
-Route::post('/order/{product}', [CatalogOrderController::class, 'store'])->name('catalog.order.store');
-

@@ -10,7 +10,7 @@ class AdminCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(10); // You can change 10 to any number of items per page
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -23,11 +23,22 @@ class AdminCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         Category::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'status' => $request->status,
+            'description' => $request->description,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Category created successfully.');
@@ -48,11 +59,22 @@ class AdminCategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $category = Category::findOrFail($id);
+        $imagePath = $category->image;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         $category->update([
             'name' => $request->name,
+            'status' => $request->status,
+            'description' => $request->description,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');

@@ -9,9 +9,9 @@
         <div class="mb-3">
             <label>Status</label>
             <select name="status" class="form-control">
-                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
-                <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                <option value="Processing" {{ $order->status == 'Processing' ? 'selected' : '' }}>Processing</option>
+                <option value="Completed" {{ $order->status == 'Completed' ? 'selected' : '' }}>Completed</option>
             </select>
         </div>
 

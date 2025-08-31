@@ -13,7 +13,7 @@ class AdminProductController extends Controller
     // List products
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category')->paginate(25); // Show 10 products per page
         return view('admin.products.index', compact('products'));
     }
 
@@ -35,7 +35,7 @@ class AdminProductController extends Controller
             'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        $data = $request->only(['name', 'price', 'description', 'category_id']);
+        $data = $request->only(['name', 'price', 'description', 'category_id', 'status']);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
@@ -67,7 +67,7 @@ class AdminProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
-        $data = $request->only(['name', 'price', 'description', 'category_id']);
+        $data = $request->only(['name', 'price', 'description', 'category_id', 'status']);
 
         if ($request->hasFile('image')) {
             if ($product->image && Storage::disk('public')->exists($product->image)) {

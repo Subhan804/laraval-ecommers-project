@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,8 +15,10 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
     <style>
-        <style>.sticky-top {
+        /* Advanced Navbar Styling */
+        .sticky-top {
             z-index: 1020;
             /* Ensure it stays above other elements */
         }
@@ -150,6 +153,19 @@
             text-decoration: none;
         }
 
+        .dropdown-menu .dropdown-item {
+            color: black;
+            /* Default text color */
+            background-color: white;
+            /* Default background */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #34393fff;
+            color: white;
+        }
+
         .dark-mode .lang-selector a {
             color: #adb5bd;
         }
@@ -181,6 +197,11 @@
         }
     </style>
 </head>
+@php
+$cart = session('cart', []);
+$cart_total = 0;
+@endphp
+
 <body>
     <!-- Mega Bar -->
     <div class="bg-light border-bottom py-2 text-dark small mega-bar">
@@ -192,7 +213,6 @@
                 <div class="lang-selector">
                     <a href="#" class="active">EN</a> | <a href="#">ES</a>
                 </div>
-                <a href="#" class="text-decoration-none text-dark"><i class="bi bi-person"></i> My Account</a>
                 <a href="#" class="text-decoration-none text-dark"><i class="bi bi-heart"></i> Wish List (2)</a>
                 <button id="themeToggle" class="btn btn-sm btn-outline-secondary">
                     <i class="bi bi-moon-stars"></i>
@@ -203,119 +223,212 @@
     <!-- Main Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <!-- Left: Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
                 <i class="bi bi-shop fs-4 me-2"></i>
                 <span>Your Store</span>
             </a>
 
+            <!-- Toggler for Mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Navbar Content -->
             <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Left Nav Links -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.html"><i class="bi bi-grid"></i> Categories</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button"
-                            data-bs-toggle="dropdown">
-                            <i class="bi bi-bag"></i> Shop
+                        <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#servicesDrawer" aria-controls="servicesDrawer">
+                            <i class="bi bi-bag"></i> Services
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="shopDropdown">
-                            <li><a class="dropdown-item" href="#">New Arrivals</a></li>
-                            <li><a class="dropdown-item" href="#">Best Sellers</a></li>
-                            <li><a class="dropdown-item" href="#">On Sale</a></li>
-                        </ul>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">About</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
                 </ul>
 
-                <!-- Search Bar -->
-                <form class="d-flex me-3 search-bar" role="search">
-                    <input class="form-control form-control-sm" type="search" placeholder="Search products..."
-                        aria-label="Search">
-                    <button class="btn btn-sm btn-outline-light" type="submit">
+                <!-- Centered Search Bar -->
+                <form class="d-flex mx-auto search-bar" role="search" style="max-width: 400px; width: 100%;">
+                    <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
                 </form>
 
-                <!-- Cart Dropdown -->
-                <div class="nav-item dropdown me-3">
-                    <a class="btn btn-sm btn-outline-light position-relative" href="#" id="cartDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-cart"></i>
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end p-3" style="width: 300px;"
-                        aria-labelledby="cartDropdown">
-                        <li class="cart-preview-item mb-3 d-flex align-items-center">
-                            <img src="https://via.placeholder.com/50" alt="Product" class="rounded me-3">
-                            <div class="flex-grow-1">
-                                <div>Wireless Earbuds</div>
-                                <div class="text-muted">1 × $49.99</div>
-                            </div>
-                            <a href="#" class="text-danger"><i class="bi bi-trash"></i></a>
-                        </li>
-                        <li class="cart-preview-item mb-3 d-flex align-items-center">
-                            <img src="https://via.placeholder.com/50" alt="Product" class="rounded me-3">
-                            <div class="flex-grow-1">
-                                <div>Smart Watch</div>
-                                <div class="text-muted">2 × $89.99</div>
-                            </div>
-                            <a href="#" class="text-danger"><i class="bi bi-trash"></i></a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li class="d-flex justify-content-between fw-bold mb-3">
-                            <span>Total:</span>
-                            <span>$229.97</span>
-                        </li>
-                        <li>
-                            <div class="d-grid gap-2">
-                                <a href="{{ route('cart.index') }}" class="btn btn-sm btn-outline-dark">View Cart</a>
-                                <a href="cart.html" class="btn btn-sm btn-dark">Checkout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <!-- Right: Cart & User -->
+                <div class="d-flex align-items-center">
 
-                <!-- User Dropdown -->
-                <div class="nav-item dropdown">
-                    <a class="btn btn-sm btn-outline-light" href="#" id="userDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i> Account
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box"></i> Orders</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i> Wishlist</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i>
-                                Logout</a></li>
-                    </ul>
+                    <!-- Cart Dropdown -->
+                    <div class="nav-item dropdown me-3">
+                        <a class="btn btn-sm btn-outline-light position-relative" href="#" id="cartDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{count($cart)}}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-3" style="width: 300px;"
+                            aria-labelledby="cartDropdown">
+                            @forelse($cart as $id => $item)
+                            @php
+                            $cart_total += $item['quantity'] * $item['price'];
+                            @endphp
+                            <li class="cart-preview-item mb-3 d-flex align-items-center">
+                                <img src="{{ asset('storage/' . $item['image']) }}" alt="Product" class="rounded me-3" height="50px" width="50px">
+                                <div class="flex-grow-1">
+                                    <div>{{ $item['name'] }}</div>
+                                    <div class="text-muted">{{ $item['quantity'] }} × ${{ number_format($item['price'], 2) }}</div>
+                                </div>
+                                <a href="{{ route('cart.remove', $id) }}" class="text-danger"
+                                    onclick="return confirm('Remove this item from cart?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </li>
+                            @empty
+                            <li class="cart-preview-item mb-3 d-flex align-items-center ">
+                                No Item In Cart
+                            </li>
+                            @endforelse
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="d-flex justify-content-between fw-bold mb-3">
+                                <span>Total:</span>
+                                <span>${{$cart_total}}</span>
+                            </li>
+                            <li>
+                                <div class="d-grid gap-2">
+                                    <a href="{{ route('cart.index') }}" class="btn btn-sm btn-outline-dark">View Cart</a>
+                                    <a href="{{ route('checkout') }}" class="btn btn-sm btn-outline-dark w-100 text-white bg-dark"><i class="bi bi-cart-plus me-1"></i> Checkout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- User Dropdown -->
+                    <div class="nav-item dropdown">
+                        <a class="btn btn-sm btn-outline-light" href="#" id="userDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-box"></i> Orders</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i> Wishlist</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
-        <!-- Main Content -->
-        <div class="container mt-4">
-            @yield('content')
+
+    {{-- Session Alert --}}
+    @if (session('success'))
+    <div id="cart-alert" class="alert alert-success alert-dismissible fade show rounded-0 mb-0" role="alert">
+        <a href="{{ route('cart.index') }}" class="alert-link">View Cart</a>
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(() => {
+            const alert = document.getElementById('cart-alert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(() => alert.remove(), 500); // remove from DOM after fade
+            }
+        }, 4000); // 4 seconds
+    </script>
+    @endif
+    <!-- Main Content -->
+    @yield('content')
+
+    <!-- Services Side Drawer -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="servicesDrawer" aria-labelledby="servicesDrawerLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="servicesDrawerLabel">Our Services</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
+        <div class="offcanvas-body">
+            <ul class="list-group list-group-flush">
+                @foreach($site_categories as $scategory)
+                <li class="list-group-item">
+                    <a href="{{ route('catalog.category.show',$scategory->id) }}" class="text-decoration-none text-dark">
+                        {{ $scategory->name }}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- About -->
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-uppercase fw-bold">Your Store</h6>
+                    <p class="small mb-0">
+                        We offer a wide selection of quality products at the best prices.
+                        Shop with confidence and enjoy fast delivery.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-2 mb-3">
+                    <h6 class="text-uppercase fw-bold">Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="/" class="text-decoration-none text-light">Home</a></li>
+                        <li><a href="/about" class="text-decoration-none text-light">About</a></li>
+                        <li><a href="/contact" class="text-decoration-none text-light">Contact</a></li>
+                        <li><a href="/shop" class="text-decoration-none text-light">Shop</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="col-md-3 mb-3">
+                    <h6 class="text-uppercase fw-bold">Customer Service</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-light">FAQ</a></li>
+                        <li><a href="#" class="text-decoration-none text-light">Returns</a></li>
+                        <li><a href="#" class="text-decoration-none text-light">Shipping Info</a></li>
+                        <li><a href="#" class="text-decoration-none text-light">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter / Social -->
+                <div class="col-md-3 mb-3">
+                    <h6 class="text-uppercase fw-bold">Stay Connected</h6>
+                    <form class="d-flex mb-3">
+                        <input type="email" class="form-control form-control-sm me-2" placeholder="Email address">
+                        <button class="btn btn-sm btn-primary" type="submit">Subscribe</button>
+                    </form>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-secondary" />
+
+            <div class="text-center small">
+                © {{ date('Y') }} Your Store. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <!-- Bootstrap JS & Custom Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -351,4 +464,5 @@
         });
     </script>
 </body>
+
 </html>

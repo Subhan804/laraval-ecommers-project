@@ -11,7 +11,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        return view('cart.index', compact('cart'));
+        return view('catalog.cart.index', compact('cart'));
     }
 
     // Add product to cart
@@ -25,6 +25,7 @@ class CartController extends Controller
         } else {
             $cart[$id] = [
                 "name" => $product->name,
+                "image" => $product->image,
                 "price" => $product->price,
                 "quantity" => 1
             ];
