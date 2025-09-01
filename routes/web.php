@@ -11,6 +11,9 @@ use App\Http\Controllers\Catalog\ProductController;
 use App\Http\Controllers\Catalog\OrderController as CatalogOrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Catalog\OrderController;
+// use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Catalog\AboutController;
+
 
 // Admin routes
 Route::prefix('admin')->group(function () {
@@ -26,7 +29,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::prefix('catalog')->group(function () {
     Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('catalog.category.show');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('catalog.product.show');
+    // Route::get('/about', [AboutController::class, 'index'])->name('catalog.about');
 });
+Route::get('/about', [AboutController::class, 'index'])->name('catalog.about');
+Route::get('/Contact', [AboutController::class, 'index'])->name('catalog.Contact');
 
 // Cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -37,3 +43,4 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 // Checkout and order placement
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/order/place', [OrderController::class, 'place'])->name('order.place');
+Route::get('/search',[HomeController::class,'search'])->name('search');

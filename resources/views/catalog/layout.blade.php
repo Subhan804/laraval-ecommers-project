@@ -185,6 +185,28 @@
         .search-bar {
             max-width: 300px;
         }
+        /* Default (light mode) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode */
+body.dark-mode {
+  background-color: #121212;  /* dark background */
+  color: #ffffff;             /* light text */
+}
+
+/* Optional tweaks for elements */
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark-mode a {
+  color: #90caf9; /* softer link color */
+}
+
 
         @media (max-width: 576px) {
             .search-bar {
@@ -198,8 +220,8 @@
     </style>
 </head>
 @php
-$cart = session('cart', []);
-$cart_total = 0;
+    $cart = session('cart', []);
+    $cart_total = 0;
 @endphp
 
 <body>
@@ -240,23 +262,25 @@ $cart_total = 0;
                 <!-- Left Nav Links -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" data-bs-toggle="offcanvas" data-bs-target="#servicesDrawer" aria-controls="servicesDrawer">
+                        <a class="nav-link active" href="#" data-bs-toggle="offcanvas"
+                            data-bs-target="#servicesDrawer" aria-controls="servicesDrawer">
                             <i class="bi bi-bag"></i> Services
                         </a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                     <li class="nav-item">
+                        <a href="{{ route('catalog.about') }}" class="nav-link">About</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{{ route('catalog.about') }}">Contact</a>
                     </li>
+                    
                 </ul>
 
                 <!-- Centered Search Bar -->
-                <form class="d-flex mx-auto search-bar" role="search" style="max-width: 400px; width: 100%;">
-                    <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
+                <form class="d-flex mx-auto search-bar" role="search" method="GET" action="{{ route('search') }}"
+                    style="max-width: 400px; width: 100%;">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search products..."
+                        aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -270,41 +294,47 @@ $cart_total = 0;
                         <a class="btn btn-sm btn-outline-light position-relative" href="#" id="cartDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-cart"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{count($cart)}}</span>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ count($cart) }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-3" style="width: 300px;"
                             aria-labelledby="cartDropdown">
                             @forelse($cart as $id => $item)
-                            @php
-                            $cart_total += $item['quantity'] * $item['price'];
-                            @endphp
-                            <li class="cart-preview-item mb-3 d-flex align-items-center">
-                                <img src="{{ asset('storage/' . $item['image']) }}" alt="Product" class="rounded me-3" height="50px" width="50px">
-                                <div class="flex-grow-1">
-                                    <div>{{ $item['name'] }}</div>
-                                    <div class="text-muted">{{ $item['quantity'] }} × ${{ number_format($item['price'], 2) }}</div>
-                                </div>
-                                <a href="{{ route('cart.remove', $id) }}" class="text-danger"
-                                    onclick="return confirm('Remove this item from cart?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </li>
+                                @php
+                                    $cart_total += $item['quantity'] * $item['price'];
+                                @endphp
+                                <li class="cart-preview-item mb-3 d-flex align-items-center">
+                                    <img src="{{ asset('storage/' . $item['image']) }}" alt="Product"
+                                        class="rounded me-3" height="50px" width="50px">
+                                    <div class="flex-grow-1">
+                                        <div>{{ $item['name'] }}</div>
+                                        <div class="text-muted">{{ $item['quantity'] }} ×
+                                            ${{ number_format($item['price'], 2) }}</div>
+                                    </div>
+                                    <a href="{{ route('cart.remove', $id) }}" class="text-danger"
+                                        onclick="return confirm('Remove this item from cart?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </li>
                             @empty
-                            <li class="cart-preview-item mb-3 d-flex align-items-center ">
-                                No Item In Cart
-                            </li>
+                                <li class="cart-preview-item mb-3 d-flex align-items-center ">
+                                    No Item In Cart
+                                </li>
                             @endforelse
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li class="d-flex justify-content-between fw-bold mb-3">
                                 <span>Total:</span>
-                                <span>${{$cart_total}}</span>
+                                <span>${{ $cart_total }}</span>
                             </li>
                             <li>
                                 <div class="d-grid gap-2">
-                                    <a href="{{ route('cart.index') }}" class="btn btn-sm btn-outline-dark">View Cart</a>
-                                    <a href="{{ route('checkout') }}" class="btn btn-sm btn-outline-dark w-100 text-white bg-dark"><i class="bi bi-cart-plus me-1"></i> Checkout</a>
+                                    <a href="{{ route('cart.index') }}" class="btn btn-sm btn-outline-dark">View
+                                        Cart</a>
+                                    <a href="{{ route('checkout') }}"
+                                        class="btn btn-sm btn-outline-dark w-100 text-white bg-dark"><i
+                                            class="bi bi-cart-plus me-1"></i> Checkout</a>
                                 </div>
                             </li>
                         </ul>
@@ -324,7 +354,8 @@ $cart_total = 0;
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i
+                                        class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -334,21 +365,21 @@ $cart_total = 0;
 
     {{-- Session Alert --}}
     @if (session('success'))
-    <div id="cart-alert" class="alert alert-success alert-dismissible fade show rounded-0 mb-0" role="alert">
-        <a href="{{ route('cart.index') }}" class="alert-link">View Cart</a>
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <script>
-        setTimeout(() => {
-            const alert = document.getElementById('cart-alert');
-            if (alert) {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-                setTimeout(() => alert.remove(), 500); // remove from DOM after fade
-            }
-        }, 4000); // 4 seconds
-    </script>
+        <div id="cart-alert" class="alert alert-success alert-dismissible fade show rounded-0 mb-0" role="alert">
+            <a href="{{ route('cart.index') }}" class="alert-link">View Cart</a>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('cart-alert');
+                if (alert) {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 500); // remove from DOM after fade
+                }
+            }, 4000); // 4 seconds
+        </script>
     @endif
     <!-- Main Content -->
     @yield('content')
@@ -357,16 +388,18 @@ $cart_total = 0;
     <div class="offcanvas offcanvas-start" tabindex="-1" id="servicesDrawer" aria-labelledby="servicesDrawerLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="servicesDrawerLabel">Our Services</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <ul class="list-group list-group-flush">
-                @foreach($site_categories as $scategory)
-                <li class="list-group-item">
-                    <a href="{{ route('catalog.category.show',$scategory->id) }}" class="text-decoration-none text-dark">
-                        {{ $scategory->name }}
-                    </a>
-                </li>
+                @foreach ($site_categories as $scategory)
+                    <li class="list-group-item">
+                        <a href="{{ route('catalog.category.show', $scategory->id) }}"
+                            class="text-decoration-none text-dark">
+                            {{ $scategory->name }}
+                        </a>
+                    </li>
                 @endforeach
             </ul>
         </div>
@@ -435,34 +468,31 @@ $cart_total = 0;
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script>
-        // Dark Mode Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+const icon = themeToggle.querySelector('i');
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            const icon = themeToggle.querySelector('i');
-            if (body.classList.contains('dark-mode')) {
-                icon.classList.replace('bi-moon-stars', 'bi-brightness-high');
-            } else {
-                icon.classList.replace('bi-brightness-high', 'bi-moon-stars');
-            }
-        });
+// Check for saved user preference
+if (localStorage.getItem('darkMode') === 'enabled') {
+    body.classList.add('dark-mode');
+    icon.classList.replace('bi-moon-stars', 'bi-brightness-high');
+}
 
-        // Optional: Remember user preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            body.classList.add('dark-mode');
-            themeToggle.querySelector('i').classList.replace('bi-moon-stars', 'bi-brightness-high');
-        }
+// Toggle dark mode
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
 
-        themeToggle.addEventListener('click', () => {
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        });
-    </script>
+    if (body.classList.contains('dark-mode')) {
+        // Dark mode enabled
+        icon.classList.replace('bi-moon-stars', 'bi-brightness-high');
+        localStorage.setItem('darkMode', 'enabled');
+    } else {
+        // Dark mode disabled
+        icon.classList.replace('bi-brightness-high', 'bi-moon-stars');
+        localStorage.setItem('darkMode', 'disabled');
+    }
+});
+</script>
 </body>
 
 </html>

@@ -8,7 +8,7 @@
     <img src="{{ asset('storage/' . $category->image) }}"
         alt="{{ $category->name }}"
         class="w-100 h-100 object-fit-cover"
-        style="filter: brightness(60%) blur(4px);">
+        style="filter: brightness(65%) blur(4px);">
     @endif
 
     <div class="position-absolute top-50 start-50 translate-middle px-3">
